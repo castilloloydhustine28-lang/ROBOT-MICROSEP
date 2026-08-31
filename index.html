@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MICROSEP — Companion app for the automated density separation robot for microplastic extraction.">
+  <title>MICROSEP — Control Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- ========== SIDEBAR NAV ========== -->
+  <nav id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">μ</div>
+      <span class="logo-text">MICROSEP</span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-btn active" data-page="dashboard" id="nav-dashboard">
+        <span class="nav-icon">◉</span>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-btn" data-page="monitor" id="nav-monitor">
+        <span class="nav-icon">◎</span>
+        <span>Live Monitor</span>
+      </button>
+      <button class="nav-btn" data-page="calibration" id="nav-calibration">
+        <span class="nav-icon">⚙</span>
+        <span>Calibration</span>
+      </button>
+      <button class="nav-btn" data-page="experiment" id="nav-experiment">
+        <span class="nav-icon">⚗</span>
+        <span>Experiment</span>
+      </button>
+      <button class="nav-btn" data-page="history" id="nav-history">
+        <span class="nav-icon">☰</span>
+        <span>History</span>
+      </button>
+      <button class="nav-btn" data-page="results" id="nav-results">
+        <span class="nav-icon">▤</span>
+        <span>Results</span>
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <button id="btn-connect" class="connect-btn">
+        <span class="connect-dot disconnected"></span>
+        Connect Arduino
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main id="main-content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <section id="page-dashboard" class="page active">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <div class="connection-badge" id="conn-badge">
+          <span class="conn-dot"></span>
+          <span id="conn-text">Disconnected</span>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="card status-card">
+          <div class="card-label">System Status</div>
+          <div class="status-display" id="dash-status">DISCONNECTED</div>
+          <div class="status-sub" id="dash-state">Connect Arduino to begin</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Peristaltic Pump</div>
+          <div class="actuator-indicator" id="dash-pump">
+            <div class="indicator-dot"></div>
+            <span>OFF</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Air Pump</div>
+          <div class="actuator-indicator" id="dash-air">
+            <div class="indicator-dot"></div>
+            <span>OFF</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Level Sensor</div>
+          <div class="actuator-indicator" id="dash-sensor">
+            <div class="indicator-dot"></div>
+            <span>---</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Servo Valve</div>
+          <div class="actuator-indicator" id="dash-servo">
+            <div class="indicator-dot"></div>
+            <span>CLOSED</span>
+          </div>
+        </div>
+
+        <div class="card elapsed-card">
+          <div class="card-label">Stage Timer</div>
+          <div class="timer-display" id="dash-timer">--:--</div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button id="btn-start" class="action-btn start-btn" disabled>START PROCESS</button>
+        <button id="btn-stop" class="action-btn stop-btn" disabled>EMERGENCY STOP</button>
+        <button id="btn-reset" class="action-btn reset-btn" disabled>RESET</button>
+      </div>
+    </section>
+
+    <!-- ===== LIVE MONITOR ===== -->
+    <section id="page-monitor" class="page">
+      <div class="page-header">
+        <h1>Live Monitor</h1>
+        <div class="total-timer" id="monitor-total">Total: 00:00:00</div>
+      </div>
+
+      <div class="timeline-container">
+        <div class="timeline" id="process-timeline">
+          <div class="timeline-stage" data-stage="DOSING">
+            <div class="stage-marker"></div>
+            <div class="stage-info">
+              <div class="stage-name">Dosing</div>
+              <div class="stage-detail">Pump fills chamber</div>
+            </div>
+          </div>
+          <div class="timeline-stage" data-stage="AGITATING_1">
+            <div class="stage-marker"></div>
+            <div class="stage-info">
+              <div class="stage-name">Agitation #1</div>
+              <div class="stage-detail">Air pump suspends particles</div>
+            </div>
+          </div>
+          <div class="timeline-stage" data-stage="SETTLING_1">
+            <div class="stage-marker"></div>
+            <div class="stage-info">
+              <div class="stage-name">Settling #1</div>
+              <div class="stage-detail">Density separation</div>
+            </div>
+          </div>
+          <div class="timeline-stage" data-stage="OVERFLOW_1">
+            <div class="stage-marker"></div>
+            <div class="stage-info">
+              <div class="stage-name">Overflow #1</div>
+              <div class="stage-detail">Collect buoyant fraction</div>
+            </div>
+          </div>
+          <div class="timeline-stage" data-stage="AGITATING_2">
+            <div class="stage-marker"></div>
+            <div class="stage-info">
+              <div class="stage-name">Agitation #2</div>
+              <div class="stage-detail">Resuspend particles</div>
+            </div>
+          </div>
+          <div class="timeline-stage" data-stage="SETTLING_2">
+            <div class="stage-marker"></div>
+            <div class="stage-info">
+              <div class="stage-name">Settling #2</div>
+              <div class="stage-detail">Separate again</div>
+            </div>
+          </div>
+          <div class="timeline-stage" data-stage="OVERFLOW_2">
+            <div class="stage-marker"></div>
+            <div class="stage-info">
+              <div class="stage-name">Overflow #2</div>
+              <div class="stage-detail">Recover additional fraction</div>
+            </div>
+          </div>
+          <div class="timeline-stage" data-stage="DRAINAGE">
+            <div class="stage-marker"></div>
+            <div class="stage-info">
+              <div class="stage-name">Drainage</div>
+              <div class="stage-detail">Remove sediment</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="monitor-grid">
+        <div class="card monitor-card">
+          <div class="card-label">Current Stage</div>
+          <div class="monitor-value" id="mon-stage">---</div>
+        </div>
+        <div class="card monitor-card">
+          <div class="card-label">Stage Timer</div>
+          <div class="monitor-value mono" id="mon-timer">--:--</div>
+        </div>
+        <div class="card monitor-card">
+          <div class="card-label">Pump</div>
+          <div class="monitor-value" id="mon-pump">OFF</div>
+        </div>
+        <div class="card monitor-card">
+          <div class="card-label">Air</div>
+          <div class="monitor-value" id="mon-air">OFF</div>
+        </div>
+        <div class="card monitor-card">
+          <div class="card-label">Sensor</div>
+          <div class="monitor-value" id="mon-sensor">---</div>
+        </div>
+        <div class="card monitor-card">
+          <div class="card-label">Servo</div>
+          <div class="monitor-value" id="mon-servo">CLOSED</div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="action-btn stop-btn monitor-stop" id="btn-stop-monitor" disabled>⚠ EMERGENCY STOP</button>
+      </div>
+    </section>
+
+    <!-- ===== CALIBRATION ===== -->
+    <section id="page-calibration" class="page">
+      <div class="page-header">
+        <h1>Calibration Mode</h1>
+      </div>
+
+      <div class="calib-grid">
+        <div class="card calib-card">
+          <div class="card-label">Peristaltic Pump</div>
+          <p class="calib-desc">Toggle pump to measure flow rate</p>
+          <div class="toggle-row">
+            <button class="toggle-btn" id="calib-pump-btn" disabled>OFF</button>
+          </div>
+          <div class="flow-calc">
+            <label>Volume collected (mL):</label>
+            <input type="number" id="flow-volume" step="0.1" min="0" placeholder="0.0">
+            <label>Duration (s):</label>
+            <input type="number" id="flow-duration" step="0.1" min="0" placeholder="0.0">
+            <div class="flow-result">
+              Flow rate: <strong id="flow-rate">--- mL/s</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="card calib-card">
+          <div class="card-label">Air Pump</div>
+          <p class="calib-desc">Toggle air pump to test</p>
+          <div class="toggle-row">
+            <button class="toggle-btn" id="calib-air-btn" disabled>OFF</button>
+          </div>
+        </div>
+
+        <div class="card calib-card">
+          <div class="card-label">Servo Motor</div>
+          <p class="calib-desc">Adjust servo angle to test pinch valve</p>
+          <div class="slider-row">
+            <input type="range" id="calib-servo-slider" min="0" max="180" value="0" disabled>
+            <span id="calib-servo-value">0°</span>
+          </div>
+        </div>
+
+        <div class="card calib-card">
+          <div class="card-label">Level Sensor</div>
+          <p class="calib-desc">Live sensor reading</p>
+          <div class="sensor-live" id="calib-sensor">
+            <div class="sensor-dot"></div>
+            <span>---</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button id="btn-enter-calib" class="action-btn calib-enter-btn" disabled>Enter Calibration Mode</button>
+        <button id="btn-exit-calib" class="action-btn reset-btn" disabled>Exit Calibration</button>
+      </div>
+    </section>
+
+    <!-- ===== EXPERIMENT SETUP ===== -->
+    <section id="page-experiment" class="page">
+      <div class="page-header">
+        <h1>Experiment Setup</h1>
+      </div>
+
+      <div class="experiment-grid">
+        <div class="card experiment-card">
+          <div class="card-label">Sample Information</div>
+          <div class="form-group">
+            <label for="exp-sample-id">Sample ID</label>
+            <input type="text" id="exp-sample-id" placeholder="e.g., MP-001">
+          </div>
+          <div class="form-group">
+            <label for="exp-plastic-type">Plastic Type</label>
+            <input type="text" id="exp-plastic-type" placeholder="e.g., PE, PP, PS">
+          </div>
+          <div class="form-group">
+            <label for="exp-sample-mass">Sample Mass (g)</label>
+            <input type="number" id="exp-sample-mass" step="0.001" placeholder="0.000">
+          </div>
+          <div class="form-group">
+            <label for="exp-zncl2-vol">ZnCl₂ Volume (mL)</label>
+            <input type="number" id="exp-zncl2-vol" step="0.1" placeholder="0.0">
+          </div>
+          <div class="form-group">
+            <label for="exp-zncl2-conc">ZnCl₂ Concentration</label>
+            <input type="text" id="exp-zncl2-conc" placeholder="e.g., 1.5 g/mL">
+          </div>
+          <div class="form-group">
+            <label for="exp-trial">Trial Number</label>
+            <input type="number" id="exp-trial" min="1" value="1">
+          </div>
+          <div class="form-group">
+            <label for="exp-operator">Operator</label>
+            <input type="text" id="exp-operator" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <label for="exp-notes">Notes</label>
+            <textarea id="exp-notes" rows="3" placeholder="Additional notes..."></textarea>
+          </div>
+        </div>
+
+        <div class="card experiment-card">
+          <div class="card-label">Process Parameters</div>
+          <p class="param-note">Defaults from Crutchett &amp; Bornt (2024). Sent to Arduino before starting.</p>
+
+          <div class="param-section-label">Dosing</div>
+          <div class="form-group">
+            <label for="param-dosing">Dosing Time (ms)</label>
+            <input type="number" id="param-dosing" value="25000" min="0" step="1000">
+            <span class="param-hint">25 s — ~25 mL at ~1 mL/s</span>
+          </div>
+
+          <div class="param-section-label">Agitation &amp; Settling</div>
+          <div class="form-group">
+            <label for="param-agit1">Agitation #1 Time (ms)</label>
+            <input type="number" id="param-agit1" value="60000" min="0" step="1000">
+            <span class="param-hint">60 s (1 min)</span>
+          </div>
+          <div class="form-group">
+            <label for="param-settl1">Settling #1 Time (ms)</label>
+            <input type="number" id="param-settl1" value="1200000" min="0" step="60000">
+            <span class="param-hint">1,200 s (20 min)</span>
+          </div>
+          <div class="form-group">
+            <label for="param-agit2">Agitation #2 Time (ms)</label>
+            <input type="number" id="param-agit2" value="60000" min="0" step="1000">
+            <span class="param-hint">60 s (1 min)</span>
+          </div>
+          <div class="form-group">
+            <label for="param-settl2">Settling #2 Time (ms)</label>
+            <input type="number" id="param-settl2" value="1200000" min="0" step="60000">
+            <span class="param-hint">1,200 s (20 min)</span>
+          </div>
+
+          <div class="param-section-label">Overflow Control</div>
+          <div class="form-group">
+            <label for="param-flow-rate">Pump Flow Rate (mL/s)</label>
+            <input type="number" id="param-flow-rate" value="1.0" min="0.01" step="0.01">
+            <span class="param-hint">Measured in Calibration mode</span>
+          </div>
+          <div class="form-group">
+            <label for="param-ovf-volume">Overflow Volume (mL)</label>
+            <input type="number" id="param-ovf-volume" value="15" min="0" step="0.5">
+            <span class="param-hint">15 mL per reference procedure</span>
+          </div>
+          <div class="form-group">
+            <label>Calculated Overflow Pump Time</label>
+            <div class="calc-result" id="calc-ovf-time">15.0 s  →  15000 ms</div>
+            <span class="param-hint">= volume ÷ flow rate → sent to Arduino</span>
+          </div>
+          <input type="hidden" id="param-ovf-pump" value="15000">
+          <div class="form-group">
+            <label for="param-arm">Sensor Arm Delay (ms)</label>
+            <input type="number" id="param-arm" value="3000" min="0" step="500">
+            <span class="param-hint">3 s — ignore sensor during initial fill</span>
+          </div>
+          <div class="form-group">
+            <label for="param-ovf-timeout">Overflow Timeout (ms)</label>
+            <input type="number" id="param-ovf-timeout" value="120000" min="0" step="1000">
+            <span class="param-hint">120 s (2 min) — safety limit</span>
+          </div>
+
+          <div class="param-section-label">Drainage</div>
+          <div class="form-group">
+            <label for="param-drain">Drainage Time (ms)</label>
+            <input type="number" id="param-drain" value="15000" min="0" step="1000">
+            <span class="param-hint">15 s</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button id="btn-send-params" class="action-btn calib-enter-btn" disabled>Send Parameters to Arduino</button>
+        <button id="btn-begin-run" class="action-btn start-btn" disabled>BEGIN RUN</button>
+      </div>
+    </section>
+
+    <!-- ===== HISTORY ===== -->
+    <section id="page-history" class="page">
+      <div class="page-header">
+        <h1>Run History</h1>
+        <button id="btn-clear-history" class="action-btn reset-btn small">Clear All</button>
+      </div>
+      <div id="history-list" class="history-list">
+        <div class="empty-state">No runs recorded yet. Complete an experiment to see it here.</div>
+      </div>
+    </section>
+
+    <!-- ===== RESULTS ===== -->
+    <section id="page-results" class="page">
+      <div class="page-header">
+        <h1>Results</h1>
+      </div>
+      <div class="card results-placeholder">
+        <div class="card-label">Recovery Analysis</div>
+        <p>Results will populate as experiments are completed.</p>
+        <p>Compare manual vs. MICROSEP recovery rates and consistency (CV).</p>
+        <div class="empty-state">Complete at least one experiment to see results.</div>
+      </div>
+    </section>
+  </main>
+
+  <script src="serial.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
